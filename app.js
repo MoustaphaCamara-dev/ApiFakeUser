@@ -1,7 +1,7 @@
 const express = require("express");
 const { MongoClient } = require("mongodb");
 const dotenv = require("dotenv");
-const generateRandomPassword = require("./passwordGenerator");
+const cors = require("cors");
 
 dotenv.config();
 
@@ -9,6 +9,7 @@ const app = express();
 const serverPort = 3000;
 
 app.use(express.json());
+app.use(cors());
 
 const mongoUri = process.env.MONGODB_URI;
 let userDatabase;
@@ -21,32 +22,48 @@ MongoClient.connect(mongoUri, {
     console.log("Connecté à MongoDB");
     userDatabase = mongoClient.db("userDB");
   })
-  .catch(console.error);
+  .catch((error) => console.error(error));
+
+const getRandomPassword = () => {
+  const characters =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+  let password = "";
+  for (let i = 0; i < 8; i++) {
+    password += characters.charAt(
+      Math.floor(Math.random() * characters.length)
+    );
+  }
+  return password;
+};
 
 const createFakeUser = async () => {
-  const [firstNameData, lastNameData, domainData] = await Promise.all([
-    userDatabase
+  try {
+    const firstName = await userDatabase
       .collection("firstNames")
       .aggregate([{ $sample: { size: 1 } }])
-      .toArray(),
-    userDatabase
+      .toArray();
+    const lastName = await userDatabase
       .collection("lastNames")
       .aggregate([{ $sample: { size: 1 } }])
-      .toArray(),
-    userDatabase
+      .toArray();
+    const domain = await userDatabase
       .collection("domains")
       .aggregate([{ $sample: { size: 1 } }])
-      .toArray(),
-  ]);
+      .toArray();
 
-  return {
-    firstName: firstNameData[0].name,
-    lastName: lastNameData[0].name,
-    email: `${firstNameData[0].name.toLowerCase()}.${lastNameData[0].name.toLowerCase()}@${
-      domainData[0].domain
-    }`,
-    password: generateRandomPassword(),
-  };
+    const singleFakeUser = {
+      firstName: firstName[0].name,
+      lastName: lastName[0].name,
+      email: `${firstName[0].name.toLowerCase()}.${lastName[0].name.toLowerCase()}@${
+        domain[0].domain
+      }`,
+      password: getRandomPassword(),
+    };
+
+    return singleFakeUser;
+  } catch (error) {
+    throw new Error("Erreur lors de la génération de l'utilisateur fictif");
+  }
 };
 
 app.get("/api/fake-user", async (req, res) => {
@@ -60,10 +77,14 @@ app.get("/api/fake-user", async (req, res) => {
 
 app.get("/api/fake-users", async (req, res) => {
   try {
-    const userCount = Math.max(1, parseInt(req.query.count) || 1);
-    const multipleFakeUsers = await Promise.all(
-      Array.from({ length: userCount }, createFakeUser)
-    );
+    const userCount = parseInt(req.query.count) || 1;
+    const multipleFakeUsers = [];
+
+    for (let i = 0; i < userCount; i++) {
+      const singleFakeUser = await createFakeUser();
+      multipleFakeUsers.push(singleFakeUser);
+    }
+
     res.json(multipleFakeUsers);
   } catch (error) {
     res.status(500).json({ error: error.message });
