@@ -18,6 +18,6 @@ ApiFakeUser est une API REST construite avec Node.js et Express qui génère des
 1. **Clonez le dépôt** :
 
    ```bash
-   git clone <URL_DU_DEPOT>
+   git clone https://github.com/MoustaphaCamara-dev/ApiFakeUser.git
    cd ApiFakeUser
    ```
