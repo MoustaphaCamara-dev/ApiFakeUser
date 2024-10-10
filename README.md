@@ -1,6 +1,18 @@
 # ApiFakeUser
 
-ApiFakeUser est une API REST construite avec Node.js et Express qui génère des utilisateurs fictifs avec des noms, prénoms, emails et mots de passe aléatoires. Cette API utilise MongoDB pour stocker des listes de prénoms, noms de famille et domaines.
+## Description du Projet
+Ce projet est une API simple qui génère des utilisateurs fictifs à l'aide de prénoms stockés dans une base de données MongoDB. L'objectif principal de ce projet est de me familiariser avec l'utilisation de MongoDB, un système de gestion de bases de données NoSQL, pour la manipulation de données et la création d'applications web.
+
+Technologies utilisées
+Node.js : pour créer le serveur et gérer les requêtes API.
+Express.js : pour simplifier la création de routes et la gestion des requêtes HTTP.
+MongoDB : comme base de données NoSQL pour stocker des prénoms, des noms et des domaines d'e-mail.
+
+Ce projet me permet de :
+M'exercer à l'utilisation de MongoDB pour la gestion des données.
+Apprendre à créer des API RESTful avec Express.
+Améliorer mes compétences en JavaScript et Node.js.
+Comprendre la manipulation de données dans une base de données NoSQL.
 
 ## Fonctionnalités
 
