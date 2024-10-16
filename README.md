@@ -1,7 +1,7 @@
 # ApiFakeUser
 
 ## Description du Projet
-Ce projet est une API simple qui génère des utilisateurs fictifs à l'aide de prénoms stockés dans une base de données MongoDB. L'objectif principal de ce projet est de me familiariser avec l'utilisation de MongoDB, un système de gestion de bases de données NoSQL, pour la manipulation de données et la création d'applications web.
+Ce projet est une API simple qui génère des utilisateurs fictifs à l'aide de prénoms stockés dans une base de données MongoDB. L'objectif principal de ce projet est de me familiariser avec l'utilisation de MongoDB, pour la manipulation de données et la création d'applications web.
 
 Technologies utilisées
 Node.js : pour créer le serveur et gérer les requêtes API.
